@@ -1,6 +1,5 @@
 //const bcrypt = require('bcrypt');
 
-// Middleware de autenticación
 const authMiddleware = (req, res, next) => {
     const token = req.headers['authorization'];
 

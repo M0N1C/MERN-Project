@@ -10,17 +10,16 @@ const app = express();
 
 // Configura CORS para permitir solicitudes desde el frontend
 app.use(cors({
-  origin: 'http://localhost:5173', // Cambia esto al origen de tu frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  origin: 'http://localhost:5173', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   credentials: true, // Permitir cookies y encabezados con credenciales
 }));
 
-// El resto de tu configuración...
 
 
-app.use(express.json()); // Para parsear JSON en las solicitudes
+app.use(express.json()); 
 
-// Conectar a la base de datos (MongoDB en este ejemplo)
+
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log(err));
