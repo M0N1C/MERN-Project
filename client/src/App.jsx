@@ -14,6 +14,7 @@ import StreetArtPage from './pages/tours/StreetArtPage';
 import ParksPage from './pages/tours/ParksPage';
 import MysteriesAndLegendsPage from './pages/tours/MysteriesAndLegendsPage';
 import PotsdamPage from './pages/tours/PotsdamPage';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/tours/parks" element={<ParksPage />} />
         <Route path="/tours/myl" element={<MysteriesAndLegendsPage />} />
         <Route path="/tours/potsdam" element={<PotsdamPage />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <Footer />
     </div>
