@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context"; // Importa el AuthContext
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -7,33 +8,19 @@ function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate(); // Para redirigir al usuario después del login
 
+  const { login } = useContext(AuthContext); // Desestructuramos el login del AuthContext
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Hacer una solicitud POST al backend
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }), // Enviar datos de inicio de sesión
-      });
+      // Llamamos al login desde el contexto en lugar de hacer una petición fetch directamente
+      await login(email, password); // El login se maneja desde el AuthContext
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // Inicio de sesión exitoso
-        console.log("Login successful:", data);
-        localStorage.setItem("token", data.token); // Guardar token JWT en localStorage
-        alert("Login successful!"); // Notificar al usuario
-        navigate("/protected"); // Redirigir a una ruta protegida o dashboard
-      } else {
-        // Manejar errores
-        setError(data.message || "Login failed. Please try again.");
-      }
+      // Si el login es exitoso, se redirige al usuario a la página principal o a una página protegida
+      navigate("/"); // Redirigir a la página principal o cualquier ruta protegida
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError(err.message || "Login failed. Please try again.");
     }
   };
 
@@ -87,3 +74,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+

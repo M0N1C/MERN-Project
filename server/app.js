@@ -15,11 +15,9 @@ app.use(cors({
   credentials: true, // Permitir cookies y encabezados con credenciales
 }));
 
-
-
 app.use(express.json()); 
 
-
+// Conexión a la base de datos MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log(err));
@@ -90,6 +88,26 @@ app.get('/protected', (req, res) => {
       return res.status(401).json({ message: 'Unauthorized' });
     }
     res.json({ message: 'Protected data', userId: decoded.userId });
+  });
+});
+
+// Ruta para verificar el token JWT
+app.get('/auth/verify', (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');  // Obtenemos el token del encabezado
+
+  // Verificar si no hay token
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  // Verificar el token
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(400).json({ message: 'Invalid token' });
+    }
+
+    // El token es válido, enviamos el usuario decodificado
+    res.json({ user: decoded, message: 'Token is valid' });
   });
 });
 
