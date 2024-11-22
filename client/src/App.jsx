@@ -17,6 +17,7 @@ import PotsdamPage from './pages/tours/PotsdamPage';
 import Profile from './pages/Profile';
 
 function App() {
+
   return (
     <div>
       <Navbar />

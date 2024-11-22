@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 function BookingForm({ tourTitle, availableDates, onBook }) {
   const [selectedTour, setSelectedTour] = useState("");
-
   const [numberOfPeople, setNumberOfPeople] = useState(1);
   const [selectedDate, setSelectedDate] = useState(availableDates[0]?.date || "");
   const [selectedTime, setSelectedTime] = useState(availableDates[0]?.times[0] || "");
@@ -10,7 +9,7 @@ function BookingForm({ tourTitle, availableDates, onBook }) {
   // Establecer el tour inicial al montar el componente
   useEffect(() => {
     if (tourTitle) {
-      setSelectedTour(tourTitle);
+      setSelectedTour(tourTitle);  // Usamos el tourTitle recibido como propiedad
     }
   }, [tourTitle]);
 
@@ -31,7 +30,7 @@ function BookingForm({ tourTitle, availableDates, onBook }) {
       selectedDate,
       selectedTime,
     };
-    onBook(bookingDetails); // Llama a la función `onBook` para manejar la reserva
+    onBook(bookingDetails);
   };
 
   return (
@@ -114,3 +113,4 @@ function BookingForm({ tourTitle, availableDates, onBook }) {
 }
 
 export default BookingForm;
+
