@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth.context"; 
 import BookingForm from "../../components/BookingForm";
 
 function MysteriesAndLegendsPage() {
+  const { isLoggedIn } = useContext(AuthContext); // Acceder al estado de autenticación
+  const navigate = useNavigate(); // Para redirigir al login si no está logueado
   const [isBooking, setIsBooking] = useState(false);
 
   const availableDates = [
@@ -23,6 +28,15 @@ function MysteriesAndLegendsPage() {
     console.log("Booking details: ", bookingDetails);
     alert(`Booking confirmed for ${bookingDetails.numberOfPeople} people on ${bookingDetails.selectedDate} at ${bookingDetails.selectedTime}`);
     setIsBooking(false);
+  };
+
+  const handleBookNowClick = () => {
+    if (isLoggedIn) {
+      setIsBooking(true); // Si el usuario está logueado, muestra el formulario
+    } else {
+      alert("You need to be logged in to book a tour.");
+      navigate("/login"); // Redirigir al login si no está autenticado
+    }
   };
 
   return (
@@ -48,18 +62,19 @@ function MysteriesAndLegendsPage() {
 
       <div className="mt-8">
         <button
-          onClick={() => setIsBooking(true)}
+          onClick={handleBookNowClick} // Cambié la función para manejar la autenticación
           className="px-8 py-3 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-black font-semibold rounded hover:from-pink-500 hover:to-orange-400 transition-all"
         >
           Book Now
         </button>
       </div>
 
+      {/* Mostrar el formulario solo cuando isBooking es true */}
       {isBooking && (
         <div className="mt-8">
           <h2 className="text-3xl font-semibold mb-6">Complete your booking</h2>
           <BookingForm
-            tourTitle="Mysteries and Legends"
+            tourTitle="Historical Center"
             availableDates={availableDates}
             onBook={handleBooking}
           />
@@ -70,3 +85,4 @@ function MysteriesAndLegendsPage() {
 }
 
 export default MysteriesAndLegendsPage;
+
