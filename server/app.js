@@ -10,7 +10,7 @@ const app = express();
 
 // Configura CORS para permitir solicitudes desde el frontend
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: 'http://localhost:5174', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   credentials: true, // Permitir cookies y encabezados con credenciales
 }));
@@ -111,8 +111,24 @@ app.get('/auth/verify', (req, res) => {
   });
 });
 
+
+
+
+// **Ruta para reservas**
+//const reservationsRoutes = require('./routes/reservations');
+
+
+
+//app.use('/reservations', reservationsRoutes); // Importa y utiliza las rutas de reservas
+
 // Iniciar el servidor
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+
+
+
+
+// Iniciar el servidor

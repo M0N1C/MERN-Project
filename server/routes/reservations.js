@@ -1,32 +1,46 @@
+const express = require("express");
+const mongoose = require("mongoose");
 
-
-const express = require('express');
-const Reservation = require('../models/Reservation');  // Asegúrate de tener el modelo de reserva actualizado
 const router = express.Router();
 
-// Ruta para crear una nueva reserva
-router.post('/reserve', async (req, res) => {
-  const { selectedTour, selectedDate, selectedTime, numberOfPeople, email } = req.body;
+// Esquema de Reservas
+const reservationSchema = new mongoose.Schema({
+  selectedTour: { type: String, required: true },
+  numberOfPeople: { type: Number, required: true },
+  selectedDate: { type: String, required: true },
+  selectedTime: { type: String, required: true },
+  email: { type: String, required: true }, // Campo del usuario
+});
 
+const Reservation = mongoose.model("Reservation", reservationSchema);
+
+// Endpoint POST /reservations
+router.post("/", async (req, res) => {
   try {
-    // Crear la nueva reserva con los datos enviados en el cuerpo
+    const { selectedTour, numberOfPeople, selectedDate, selectedTime, email } = req.body;
+
+    // Validar los datos recibidos
+    if (!selectedTour || !numberOfPeople || !selectedDate || !selectedTime || !email) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Crear una nueva reserva
     const newReservation = new Reservation({
       selectedTour,
+      numberOfPeople,
       selectedDate,
       selectedTime,
-      numberOfPeople,
-      email,  // Guardamos el email en la reserva
+      email,
     });
 
-    // Guardar la reserva en la base de datos
     await newReservation.save();
-
-    // Responder con la reserva confirmada
-    res.status(201).json({ message: 'Reservation confirmed', reservation: newReservation });
+    res.status(201).json({ message: "Reservation saved successfully!" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error while making the reservation' });
+    console.error("Error saving reservation:", error);
+    res.status(500).json({ message: "Error saving reservation." });
   }
 });
 
 module.exports = router;
+
+

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function BookingForm({ tourTitle, availableDates, onBook }) {
   const [selectedTour, setSelectedTour] = useState("");
@@ -6,12 +7,23 @@ function BookingForm({ tourTitle, availableDates, onBook }) {
   const [selectedDate, setSelectedDate] = useState(availableDates[0]?.date || "");
   const [selectedTime, setSelectedTime] = useState(availableDates[0]?.times[0] || "");
 
-  // Establecer el tour inicial al montar el componente
+  const location = useLocation();
+
+  // Mapeo de rutas a títulos de tours
+  const routeToTourMap = {
+    "/tours/historical": "Historical Center",
+    "/tours/coldwar": "Cold War",
+    "/tours/streetalternative": "Street Art and Berlin Alternative",
+    "/tours/parks": "Parks and Gardens",
+    "/tours/myl": "Mysteries and Legends",
+    "/tours/potsdam": "Potsdam and Sanssouci Palace",
+  };
+
   useEffect(() => {
-    if (tourTitle) {
-      setSelectedTour(tourTitle);  // Usamos el tourTitle recibido como propiedad
-    }
-  }, [tourTitle]);
+    // Detecta el tour según la ruta o usa el tourTitle si está disponible
+    const defaultTour = routeToTourMap[location.pathname] || tourTitle || "";
+    setSelectedTour(defaultTour);
+  }, [location.pathname, tourTitle]);
 
   const tourOptions = [
     "Historical Center",
@@ -113,4 +125,5 @@ function BookingForm({ tourTitle, availableDates, onBook }) {
 }
 
 export default BookingForm;
+
 
